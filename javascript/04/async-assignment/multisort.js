@@ -24,13 +24,20 @@ const splitByNewline = str => str.split('\n').map(el => Number(el));
 const OUTPUT_FILE = 'sorted.txt';
 const FILES = ['1.txt', '2.txt', '3.txt'];
 const sortElementsInFiles = async () => {
-  const fileOneData = splitByNewline(await readFileAsync(FILES[0]));
-  const fileTwoData = splitByNewline(await readFileAsync(FILES[1]));
-  const fileThreeData = splitByNewline(await readFileAsync(FILES[2]));
+  const [fileOne, fileTwo, fileThree] = FILES;
+  const fileOneData = splitByNewline(await readFileAsync(fileOne));
+  const fileTwoData = splitByNewline(await readFileAsync(fileTwo));
+  const fileThreeData = splitByNewline(await readFileAsync(fileThree));
   const allFilesDataSorted = [...fileOneData, ...fileTwoData, ...fileThreeData].sort((a, b) => a - b);
-  const outputString = allFilesDataSorted.reduce((acc, currVal) => acc + currVal +'\n', '');
+  const outputString = allFilesDataSorted.reduce((acc, currVal) => acc + currVal + '\n', '');
   await writeFileAsync(OUTPUT_FILE, outputString);
 };
 
-(async () => await sortElementsInFiles())();
- 
+(async () => {
+  try {
+    await sortElementsInFiles();
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+})();
